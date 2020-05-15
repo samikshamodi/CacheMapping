@@ -1,5 +1,5 @@
 import math
-
+import random
 """
 Consider a cache of size 16 KB with block size 256 bytes. The size of main memory is 128 KB. 
 Given:
@@ -48,11 +48,77 @@ Number of bits in tag = Number of bits in physical address – (Number of bits i
 
 <Main Memory Address - 17 bits> = |Tag - 4 bits | Set - 5 bits | Word-offset - 8 bits|
 """
+def direct_mapping():
+    index_bits=int(math.log(cache_lines,2))
+    print("index bits: ", index_bits)
+
+    tag_bits=address_bits-index_bits-wordoffset_bits
+    print("tag bits:", tag_bits)
+ 
+    #data wordAdrr binAddr tag index offset hit/miss
+    cache=[]
+    for i in range(cache_lines):
+        cache.append([0,0,0,0,0,0,0])
+         
+
+    ch="true"
+    while(ch=="true"):
+        command=input().split()  
+        print(command)
+        if(command[0]=="quit"):
+            exit()
+
+        if(command[0]=="printcache"):
+            print(cache)
+
+        if(command[0]=="read"):
+            word_addr=int(command[1])  #address to be read in cache
+            bin_addr=dec_to_bin(word_addr,address_bits)
+            tag=bin_addr[:tag_bits]
+            index=bin_addr[tag_bits:tag_bits+index_bits]
+            offset=bin_addr[tag_bits+index_bits:]
+            data=rand_byte()
+            print(data,word_addr,bin_addr, tag, index, offset)
+        
+        if(command[0]=="write"):
+            address=command[1]
+            data=command[2]
+
+
+def associative_mapping():
+    tag_bits=address_bits-wordoffset_bits
+    print("tag bits:", tag_bits)
+
+def k_associative_mapping():
+    set_size =int( input("Input set size: "))
+    total_sets=cache_lines//set_size
+    print("total sets: ", total_sets)
+
+    set_bits=int(math.log(total_sets,2))
+    print("set bits: ", set_bits)
+
+    tag_bits=address_bits-set_bits-wordoffset_bits
+    print("tag bits:",tag_bits)
+
+def dec_to_bin(integer,width):
+    """Returns a binary string representation of an integer value
+    If integer is 15, width is 5. It returns 01111"""
+    return "{0:0>{1}b}".format(integer, width)
+
+def bin_to_dec(n): 
+    return int(n,2) 
+
+
+def rand_byte():
+    """Returns a random byte between 0 to 255"""
+    return random.randint(0,255)
+
 
 """
-cache_size =int( input("Input cache size in bytes: "))
-block_size = int(input("Input block size in bytes: "))
-memory_size =int(input("Input main memory size in bytes: "))"""
+print("Input in power of 2 means that if you input 7, it would mean 2^7 bytes")
+cache_size =int( input("Input cache size in power of 2 bytes: "))
+block_size = int(input("Input block size in power of 2 bytes: "))
+memory_size =int(input("Input main memory size in power of 2 bytes: "))"""
 
 cache_size=2**14
 block_size=2**8
@@ -70,34 +136,17 @@ print("address bits:  ",address_bits)
 wordoffset_bits=int(math.log(block_size,2))
 print("word-offset bits: ",wordoffset_bits)
 
-
 #Take user input to determine the type of mapping they want
 #mapping=int(input(" Enter the desired number \n 0 for Direct Mapping \n 1 for Fully Associative Mapping \n 2 for Set Associative Mapping\n "))
 mapping=0
-
-#Direct mapping
 if(mapping==0):
-    index_bits=int(math.log(cache_lines,2))
-    print("index bits: ", index_bits)
-    tag_bits=address_bits-index_bits-wordoffset_bits
-    print("tag bits:", tag_bits)
+    direct_mapping()
 
-#Fully associative mapping
-if (mapping==1):
-    tag_bits=address_bits-wordoffset_bits
-    print("tag bits:", tag_bits)
+if(mapping==1):
+    associative_mapping()
 
 if(mapping==2):
-    set_size =int( input("Input set size: "))
-    total_sets=cache_lines//set_size
-    print("total sets: ", total_sets)
-    set_bits=int(math.log(total_sets,2))
-    print("set bits: ", set_bits)
-    tag_bits=address_bits-set_bits-wordoffset_bits
-    print("tag bits:",tag_bits)
-
-
-
+    k_associative_mapping()
 
     
 
