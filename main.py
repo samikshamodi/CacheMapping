@@ -55,13 +55,11 @@ def direct_mapping():
     tag_bits=address_bits-index_bits-wordoffset_bits
     print("tag bits:", tag_bits)
  
-    #data wordAdrr binAddr tag index offset hit/miss
-    cache=[]
-    for i in range(cache_lines):
-        cache.append([0,0,0,0,0,0,0])
-         
+    #  wordAdrr binAddr tag index offset hit/miss
+    cache=[0]*cache_lines
+    print(cache)
 
-    ch="true"
+    """ch="true"
     while(ch=="true"):
         command=input().split()  
         print(command)
@@ -72,17 +70,11 @@ def direct_mapping():
             print(cache)
 
         if(command[0]=="read"):
-            word_addr=int(command[1])  #address to be read in cache
-            bin_addr=dec_to_bin(word_addr,address_bits)
-            tag=bin_addr[:tag_bits]
-            index=bin_addr[tag_bits:tag_bits+index_bits]
-            offset=bin_addr[tag_bits+index_bits:]
-            data=rand_byte()
-            print(data,word_addr,bin_addr, tag, index, offset)
+            address=command[1]
         
         if(command[0]=="write"):
             address=command[1]
-            data=command[2]
+            data=command[2]"""
 
 
 def associative_mapping():
@@ -118,19 +110,19 @@ def rand_byte():
 print("Input in power of 2 means that if you input 7, it would mean 2^7 bytes")
 cache_size =int( input("Input cache size in power of 2 bytes: "))
 block_size = int(input("Input block size in power of 2 bytes: "))
-memory_size =int(input("Input main memory size in power of 2 bytes: "))"""
+"""
 
-cache_size=2**14
-block_size=2**8
-memory_size=2**17
+cache_size=2**13
+block_size=2**6
+
 
 #Finding no of cache lines
 cache_lines=cache_size//block_size
 print("cache lines: ",cache_lines)
 
 #Finding no of bits required in pyhsical address
-address_bits=int(math.log(memory_size,2))
-print("address bits:  ",address_bits)
+address_bits=32
+print("address bits: ",address_bits)
 
 #Finding no of bits in word-offset
 wordoffset_bits=int(math.log(block_size,2))
