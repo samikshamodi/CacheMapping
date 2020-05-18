@@ -4,8 +4,8 @@ import os
 
 #It is for a 32 bit system
   #TODO handle invalid address input part
-            #TODO mention arraylist size limitation when taking address. 32 bits address ka data pura nhi store kar payga
-            #TODO Assume that the size of each memory word is 1 byte. 
+  #TODO mention arraylist size limitation when taking address. 32 bits address ka data pura nhi store kar payga
+  #TODO Assume that the size of each memory word is 1 byte. 
 
 def direct_mapping():
     index_bits=int(math.log(cache_lines,2))
@@ -103,7 +103,7 @@ def direct_mapping():
                 else:
                     hit_flag=False #cache miss
                     print("Cache MISS!! - Address not found\nCache table is updated accordingly")
-                    print("Replacing",data[dec_index]," at index", dec_index)
+                    print("Address",dec_address,"will replace the block at index", dec_index)
                     update_table()
 
      
@@ -150,7 +150,7 @@ def direct_mapping():
                 else:
                     hit_flag=False #cache miss
                     print("Cache MISS!! - Address not found\nCache table is updated accordingly")
-                    print("Replacing",data[dec_index]," at index", dec_index)
+                    print("Address",dec_address,"will replace the block at index", dec_index)
                     update_table()
 
 
