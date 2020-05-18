@@ -325,14 +325,16 @@ def k_associative_mapping():
 
     #  wordAdrr binAddr tag index offset hit/miss
     valid=[0]*(total_sets)   #table column
-    tag=[0]*(total_sets)   #table column
+    tag=['-']*(total_sets)   #table column
     data=[0]*(total_sets)   #table column
     dirty=[0]*(total_sets)   #table column
+    lru=[0]*(total_sets)
     for i in range(total_sets):
         valid[i]=[0]*set_size
-        tag[i]=[0]*set_size
+        tag[i]=['-']*set_size
         data[i]=[0]*set_size
         dirty[i]=[0]*set_size
+        lru[i]=[]*set_size  #stores least recently used index in the cache table. The rightmost is the MOST recently used. 0th one is lru
     
     print("\n-----------------------------------------------------------------------")
     print("                          CACHE TABLE")
@@ -350,34 +352,42 @@ def k_associative_mapping():
         for i in range(total_sets):
             for j in range(set_size):
                 print(" ",i,"\t ",valid[i][j],"\t",tag[i][j],"\t\t    ",data[i][j],"\t\t\t   ",dirty[i][j],"    ",i,j)#TODO remove i j from last
+        print("lru:",lru)
 
-    """
     def update_table():
-        tag[dec_index]=bin_tag  
+        tag[dec_index][way_index]=bin_tag
         if(dec_address==0):
             dec_block_no=0
         else:
             dec_block_no=dec_address//block_size
-        
+            
         if(hit_flag==False and (command[0]=="read" or command[0]=="READ")):
             print("BLOCK "+ str(dec_block_no) + " with offset 0 to "+str(block_size-1) +" is transferred to cache at index",dec_index)
-        
-        if(hit_flag==False and (command[0]=="write" or command[0]=="WRITE")):
-            print("BLOCK "+ str(dec_block_no) + " with offset 0 to "+str(block_size-1) +" is transferred to cache at index",dec_index)
-            print("Content is updated based on Write Policy")
 
         try:
-            lru.remove(dec_index)
+            lru[dec_index].remove(way_index)
         except:
             pass
-        lru.append(dec_index)
-        data[dec_index]="BLOCK "+ str(dec_block_no)
-        k_associative_table()"""
+        lru[dec_index].append(way_index)
+        data[dec_index][way_index]="BLOCK "+ str(dec_block_no)
+        k_associative_table()
+
+    def find_in_list(lst,s):
+        list_no = 0
+        pos = 0
+        for x in range(0,len(lst)):
+            try:
+                pos = lst[x].index(s)
+                break
+            except:
+                pass
+        return pos
+
+
     ch="true"
     hit_flag=False
-    dec_way_index=0     #4 in 4way, 2 in 2 way
-    cl_cnt=0
-    lru=[]  #stores least recently used index in the cache table. The rightmost is the MOST recently used. 0th one is lru
+    way_cnt=[0]*total_sets
+    way_index=0
     while(ch=="true"):
         hit_flag=False  #True if cache hit. False if cache miss
         command=input().split()  
@@ -409,87 +419,29 @@ def k_associative_mapping():
 
             if bin_tag in tag[dec_index]: #Cache hit
                 hit_flag=True
-                dec_way_index=tag[dec_index].index(bin_tag)
-                print("Cache HIT! at index", dec_index,"Way",dec_way_index)
-
-
-"""
-            if bin_tag in tag[dec_index]:  #Cache hit
-                hit_flag=True
-                dec_index=tag.index(bin_tag)
+                #way_index=tag[dec_index].find(bin_tag)
+                way_index=find_in_list(tag,bin_tag)
                 print("Cache HIT! at index", dec_index)
                 update_table()
-
             
-            if(cl_cnt<cache_lines): #cache lines are not all filled yet. So we start filling in order from index 0              
-                if bin_tag not in tag:  #Cache miss
+            if(way_cnt[dec_index]<set_size):    #if all the 4 sets are not filled at a particular index
+                if(bin_tag not in tag[dec_index]): #Cache miss
                     hit_flag=False
-                    dec_index=cl_cnt
-                    cl_cnt+=1
+                    way_index=way_cnt[dec_index]
+                    way_cnt[dec_index]+=1
                     print("Cache MISS!! - Address not found\nCache table is updated accordingly")
-                    valid[dec_index]=1  #Make the valid bit as  1
-                    update_table()
-            
-            if(cl_cnt>=cache_lines):   #all cache lines are filled. Now in case of a miss we need to through stuff out
-                if bin_tag not in tag: #Cache miss
-                    hit_flag=False
-                    dec_index=lru.pop(0)
-                    print("Cache MISS!! - Address not found\nCache table is updated accordingly")
-                    valid[dec_index]=1  #Make the valid bit as  1
+                    valid[dec_index][way_index]=1 #Make valid bit as 1
                     update_table()
 
-     
-        if(command[0]=="write" or command[0]=="WRITE"):
-            if(len(command)<3):
-                print("Invalid input")
-                continue
-            dec_address=int(command[1])
-            dec_data=int(command[2])
-
-            if(dec_address>=2**address_bits):
-                print("Invalid address")
-                continue
-
-            print("read",dec_address)
-            print("Address bits:",address_bits)
-            print()
-            print("Instruction Breakdown")
-            print("Tag(",tag_bits,"bits )\t\tOffset(",offset_bits,"bits )")
-
-            #Determining the binary string for tag, index and offset by converting input address to a binary string
-            bin_address=dec_to_bin(dec_address,address_bits)    #input address is being converted to a binary string
-            bin_tag=bin_address[:tag_bits]      #in binary
-            bin_offset=bin_address[tag_bits:]    #in binary
-            print(bin_tag,"\t\t", bin_offset)
-            print()
-
-            if bin_tag in tag:  #Cache hit
-                hit_flag=True
-                dec_index=tag.index(bin_tag)
-                print("Cache HIT! at index", dec_index)
-                print("Content is updated based on Write Policy")
-                update_table()
-
-            
-            if(cl_cnt<cache_lines): #cache lines are not all filled yet. So we start filling in order from index 0              
-                if bin_tag not in tag:  #Cache miss
+            if(way_cnt[dec_index]>=set_size):   #All the 4 ways have been filled
+                if bin_tag not in tag[dec_index]: #Cache miss
                     hit_flag=False
-                    dec_index=cl_cnt
-                    cl_cnt+=1
+                    way_index=lru[dec_index].pop(0)
                     print("Cache MISS!! - Address not found\nCache table is updated accordingly")
-                    valid[dec_index]=1  #Make the valid bit as  1
-                    update_table()
-            
-            if(cl_cnt>=cache_lines):   #all cache lines are filled. Now in case of a miss we need to through stuff out
-                if bin_tag not in tag: #Cache miss
-                    hit_flag=False
-                    dec_index=lru.pop(0)
-                    print("Cache MISS!! - Address not found\nCache table is updated accordingly")
-                    print("Address",dec_address,"will replace the block at index", dec_index)
-                    valid[dec_index]=1  #Make the valid bit as  1
-                    update_table()
-    """
+                    valid[dec_index][way_index]=1 #Make valid bit as 1
+                    update_table()                    
 
+       
         
     
 def dec_to_bin(integer,width):
@@ -506,6 +458,10 @@ cache_lines=32
 block_size=4
 address_bits=11
 
+
+cache_lines=4
+block_size=4
+address_bits=11
 """
 block_size=64
 cache_lines=128
