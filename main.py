@@ -1,103 +1,213 @@
 import math
+import random
+import os
+
+#It is for a 32 bit system
+  #TODO handle invalid address input part
+            #TODO mention arraylist size limitation when taking address. 32 bits address ka data pura nhi store kar payga
+            #TODO Assume that the size of each memory word is 1 byte. 
+
+def direct_mapping():
+    index_bits=int(math.log(cache_lines,2))
+    print("index bits: ", index_bits)
+
+    tag_bits=address_bits-index_bits-offset_bits
+    print("tag bits:", tag_bits)
+ 
+    #  wordAdrr binAddr tag index offset hit/miss
+    valid=[0]*cache_lines   #table column
+    tag=['-']*cache_lines   #table column
+    data=[0]*cache_lines    #table column #decimal
+    dirty=[0]*cache_lines   #table column
+
+    print("\n-----------------------------------------------------------------------")
+    print("                          CACHE TABLE")
+    print("-----------------------------------------------------------------------")
+    print("Index\tValid\tTag\t\tData(Decimal)\t\tDirty Bit")
+    for i in range(cache_lines):
+        print(" ",i,"\t ",valid[i],"\t",tag[i],"\t\t    ",data[i],"\t\t\t   ",dirty[i])
+
+
+    def direct_table():
+        print("\n-----------------------------------------------------------------------")
+        print("                          CACHE TABLE")
+        print("-----------------------------------------------------------------------")
+        print("Index\tValid\t\tTag\t\tData(Decimal)\tDirty Bit")
+        for i in range(cache_lines):
+            print(i,"\t",valid[i],"\t",tag[i],"\t",data[i],"\t",dirty[i])
+
+    def update_table():
+        tag[dec_index]=bin_tag  
+        if(dec_address==0):
+            dec_block_no=0
+        else:
+            dec_block_no=dec_address//block_size
+        
+        if(hit_flag==False and (command[0]=="read" or command[0]=="READ")):
+            print("BLOCK "+ str(dec_block_no) + " with offset 0 to "+str(block_size-1) +" is transferred to cache at index",dec_index)
+        
+        if(hit_flag==False and (command[0]=="write" or command[0]=="WRITE")):
+            print("BLOCK "+ str(dec_block_no) + " with offset 0 to "+str(block_size-1) +" is transferred to cache at index",dec_index)
+            print("Content is updated based on Write Policy")
+
+        data[dec_index]="BLOCK "+ str(dec_block_no)
+        direct_table()
+    
+
+    
+    #os.system('clear')
+
+    ch="true"
+    hit_flag=False
+    while(ch=="true"):
+        hit_flag=False  #True if cache hit. False if cache miss
+        command=input().split()  
+        #os.system('clear')
+        print("\n\n\n")
+        if(command[0]=="quit" or command[0]=="QUIT"):
+            exit()
+
+        if(command[0]=="read" or command[0]=="READ"):
+            dec_address=int(command[1])   #Format of read instruction is "read address"  
+            if(dec_address>=2**address_bits):
+                print("Invalid address")
+                continue
+            print("read",dec_address)
+            print("Address bits:",address_bits)
+            print()
+            print("Instruction Breakdown")
+            print("Tag(",tag_bits,"bits )\t\tIndex(",index_bits,"bits )\t\tOffset(",offset_bits,"bits )")
+
+            """Determining the binary string for tag, index and offset by converting input address to a binary string"""
+            bin_address=dec_to_bin(dec_address,address_bits)    #input address is being converted to a binary string
+            bin_tag=bin_address[:tag_bits]      #in binary
+            bin_index=bin_address[tag_bits:tag_bits+index_bits] #in binary
+            bin_offset=bin_address[tag_bits+index_bits:]    #in binary
+            print(bin_tag,"\t",bin_index,"\t\t", bin_offset)
+            dec_index=bin_to_dec(bin_index) #in decimal
+            print("Index in decimal: ",dec_index )
+            print()
+
+            if(valid[dec_index]==0):   
+                hit_flag=False #cache miss
+                print("Cache MISS!! - Address not found\nCache table is updated accordingly")
+                valid[dec_index]=1  #Make the valid bit as  1
+                update_table()
+               
+            
+            elif(valid[dec_index]==1):
+                if(bin_tag == tag[dec_index]):
+                    hit_flag=True   #cache hit
+                    print("Cache HIT!")
+                    update_table()
+                else:
+                    hit_flag=False #cache miss
+                    print("Cache MISS!! - Address not found\nCache table is updated accordingly")
+                    print("Replacing",data[dec_index]," at index", dec_index)
+                    update_table()
+
+     
+        if(command[0]=="write" or command[0]=="WRITE"):
+            if(len(command)<3):
+                print("Invalid input")
+                continue
+            dec_address=int(command[1])
+            dec_data=int(command[2])
+
+            if(dec_address>=2**address_bits):
+                print("Invalid address")
+                continue
+
+            print("write ",dec_address,dec_data)
+            print("Address bits:",address_bits)
+            print()
+            print("Instruction Breakdown")
+            print("Tag(",tag_bits,"bits )\t\tIndex(",index_bits,"bits )\t\tOffset(",offset_bits,"bits )")
+
+            """Determining the binary string for tag, index and offset by converting input address to a binary string"""
+            bin_address=dec_to_bin(dec_address,address_bits)    #input address is being converted to a binary string
+            bin_tag=bin_address[:tag_bits]      #in binary
+            bin_index=bin_address[tag_bits:tag_bits+index_bits] #in binary
+            bin_offset=bin_address[tag_bits+index_bits:]    #in binary
+            print(bin_tag,"\t",bin_index,"\t\t", bin_offset)
+            dec_index=bin_to_dec(bin_index) #in decimal
+            print("Index in decimal: ",dec_index )
+            print()
+
+            if(valid[dec_index]==0):   
+                hit_flag=False #cache miss
+                print("Cache MISS!! - Address not found\nCache table is updated accordingly")
+                valid[dec_index]=1  #Make the valid bit as  1
+                update_table()
+               
+            
+            elif(valid[dec_index]==1):
+                if(bin_tag == tag[dec_index]):
+                    hit_flag=True   #cache hit
+                    print("Cache HIT!")
+                    print("Content is updated based on Write Policy")
+                    update_table()
+                else:
+                    hit_flag=False #cache miss
+                    print("Cache MISS!! - Address not found\nCache table is updated accordingly")
+                    print("Replacing",data[dec_index]," at index", dec_index)
+                    update_table()
+
+
+
+def associative_mapping():
+    tag_bits=address_bits-offset_bits
+    print("tag bits:", tag_bits)
+
+def k_associative_mapping():
+    set_size =int( input("Input set size: "))
+    total_sets=cache_lines//set_size
+    print("total sets: ", total_sets)
+
+    set_bits=int(math.log(total_sets,2))
+    print("set bits: ", set_bits)
+
+    tag_bits=address_bits-set_bits-offset_bits
+    print("tag bits:",tag_bits)
+
+def dec_to_bin(integer,width):
+    return "{0:0>{1}b}".format(integer, width)
+
+def bin_to_dec(n): 
+    return int(n,2) 
+
+#cache_lines =int( input("Input cache lines in power of 2: "))
+#block_size = int(input("Input block size in power of 2 bytes: "))
+
+
+cache_lines=4
+block_size=4
+address_bits=11
 
 """
-Consider a cache of size 16 KB with block size 256 bytes. The size of main memory is 128 KB. 
-Given:
-Main memory size = 128 KB 
-block_size=frame_size=line_size = 256 bytes
-Cache memory size = 16 KB
-Set size = 2 (for 2 way set associative mapping)
-"""
+block_size=64
+cache_lines=128
+address_bits=32"""
 
-"""
-DIRECT MAPPING
-Size of main memory = 128 KB = 2^7 * 2^10 bytes = 2^17 bytes. Therefore no of bits in physical address is 17 bits.
-Block size = 256 bytes = 2^8 bytes. Therefore no of bits in word-offset is 8 bits.
-Total number of lines in cache = Cache size / Line size = 16 KB / 256 bytes = 16 * 2^10 bytes / 256 bytes = 2^6 lines = 64 lines
-Therefore no of bits in index = 6 bits
-Number of bits in tag = Number of bits in physical address – (Number of bits in index + Number of bits in block offset)
-= 17 bits – (6 bits + 8 bits) = 17 bits – 14 bits = 3 bits
-Therefore no of bits in tag = 3 bits
 
-<Main Memory Address - 17 bits> = |Tag - 3 bits | Index - 6 bits | Word-offset - 8 bits|
-"""
-
-""" 
-FULLY ASSOCIATIVE MAPPING
-Size of main memory = 128 KB = 2^7 * 2^10 bytes = 2^17 bytes. Therefore no of bits in physical address is 17 bits.
-Block size = 256 bytes = 2^8 bytes. Therefore no of bits in word-offset is 8 bits.
-Number of bits in tag = Number of bits in physical address – Number of bits in word-offset = 17 bits – 8 bits = 9 bits. 
-Therefore no of bits in tag = 9 bits
-
-<Main Memory Address - 17 bits> = |Tag - 9 bits | Word-offset - 8 bits|
-
-Total number of lines in cache = Cache size / Line size = 16 KB / 256 bytes = 16 * 2^10 bytes / 256 bytes = 2^6 lines = 64 lines
-Therfore no of lines in cache = 64
-"""
-
-"""
-SET ASSOCIATIVE MAPPING
-(For a 2 way set associative mapping)
-Size of main memory = 128 KB = 2^7 * 2^10 bytes = 2^17 bytes. Therefore no of bits in physical address is 17 bits.
-Block size = 256 bytes = 2^8 bytes. Therefore no of bits in word-offset is 8 bits.
-Total number of lines in cache = Cache size / Line size = 16 KB / 256 bytes = 16 * 2^10 bytes / 256 bytes = 2^6 lines = 64 lines
-Total number of sets in cache = Total number of lines in cache / Set size = 64 / 2 = 32 sets = 2^5 sets
-Therefore no of bits in set = 5 bits
-Number of bits in tag = Number of bits in physical address – (Number of bits in set number + Number of bits in block offset)
-= 17 bits – (5 bits + 8 bits) = 17 bits – 13 bits = 4 bits
-
-<Main Memory Address - 17 bits> = |Tag - 4 bits | Set - 5 bits | Word-offset - 8 bits|
-"""
-
-"""
-cache_size =int( input("Input cache size in bytes: "))
-block_size = int(input("Input block size in bytes: "))
-memory_size =int(input("Input main memory size in bytes: "))"""
-
-cache_size=2**14
-block_size=2**8
-memory_size=2**17
-
-#Finding no of cache lines
-cache_lines=cache_size//block_size
 print("cache lines: ",cache_lines)
+print("address bits: ",address_bits)
 
-#Finding no of bits required in pyhsical address
-address_bits=int(math.log(memory_size,2))
-print("address bits:  ",address_bits)
-
-#Finding no of bits in word-offset
-wordoffset_bits=int(math.log(block_size,2))
-print("word-offset bits: ",wordoffset_bits)
-
+#Finding no of bits in offset
+offset_bits=int(math.log(block_size,2))
+print("offset bits: ",offset_bits)
 
 #Take user input to determine the type of mapping they want
 #mapping=int(input(" Enter the desired number \n 0 for Direct Mapping \n 1 for Fully Associative Mapping \n 2 for Set Associative Mapping\n "))
 mapping=0
-
-#Direct mapping
 if(mapping==0):
-    index_bits=int(math.log(cache_lines,2))
-    print("index bits: ", index_bits)
-    tag_bits=address_bits-index_bits-wordoffset_bits
-    print("tag bits:", tag_bits)
+    direct_mapping()
 
-#Fully associative mapping
-if (mapping==1):
-    tag_bits=address_bits-wordoffset_bits
-    print("tag bits:", tag_bits)
+if(mapping==1):
+    associative_mapping()
 
 if(mapping==2):
-    set_size =int( input("Input set size: "))
-    total_sets=cache_lines//set_size
-    print("total sets: ", total_sets)
-    set_bits=int(math.log(total_sets,2))
-    print("set bits: ", set_bits)
-    tag_bits=address_bits-set_bits-wordoffset_bits
-    print("tag bits:",tag_bits)
-
-
-
+    k_associative_mapping()
 
     
 
