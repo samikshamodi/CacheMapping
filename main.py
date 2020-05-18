@@ -1,11 +1,12 @@
+# End Sem Assignment
+# Samiksha Modi
+# Roll No 2019331
+
 import math
 import random
 import os
 
-# It is for a 32 bit system
-# TODO handle invalid address input part
-# TODO mention arraylist size limitation when taking address. 32 bits address ka data pura nhi store kar payga
-# TODO Assume that the size of each memory word is 1 byte.
+# It is for a 32 bit system by default
 
 
 def direct_mapping():
@@ -367,7 +368,7 @@ def k_associative_mapping():
     for i in range(total_sets):
         for j in range(set_size):
             print(" ", i, "\t ", valid[i][j], "\t", tag[i][j], "\t\t    ", data[i][j],
-                  "\t\t\t   ", dirty[i][j], "    ", i, j)  # TODO remove i j from last
+                  "\t\t\t   ", dirty[i][j])
 
     def k_associative_table():
         print("\n-----------------------------------------------------------------------")
@@ -377,7 +378,7 @@ def k_associative_mapping():
         for i in range(total_sets):
             for j in range(set_size):
                 print(" ", i, "\t ", valid[i][j], "\t", tag[i][j], "\t\t    ", data[i][j],
-                      "\t\t\t   ", dirty[i][j], "    ", i, j)  # TODO remove i j from last
+                      "\t\t\t   ", dirty[i][j])
         print("lru:", lru)
 
     def update_table():
