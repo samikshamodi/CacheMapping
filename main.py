@@ -43,23 +43,16 @@ def direct_mapping():
         else:
             dec_block_no=dec_address//block_size
         
-        if(hit_flag==False):
-            print("BLOCK "+ str(dec_block_no) + " with offset 0 to "+str(block_size-1) +" is transferred to cache")
-        data[dec_index]="BLOCK "+ str(dec_block_no)
-        direct_table()
-
-    def write_update_table():
-        tag[dec_index]=bin_tag  
-        if(dec_address==0):
-            dec_block_no=0
-        else:
-            dec_block_no=dec_address//block_size
+        if(hit_flag==False and (command[0]=="read" or command[0]=="READ")):
+            print("BLOCK "+ str(dec_block_no) + " with offset 0 to "+str(block_size-1) +" is transferred to cache at index",dec_index)
         
-        if(hit_flag==False):
-            print("Data is loaded and content is updated based on Write Policy")
+        if(hit_flag==False and (command[0]=="write" or command[0]=="WRITE")):
+            print("BLOCK "+ str(dec_block_no) + " with offset 0 to "+str(block_size-1) +" is transferred to cache at index",dec_index)
+            print("Content is updated based on Write Policy")
+
         data[dec_index]="BLOCK "+ str(dec_block_no)
         direct_table()
-       
+    
 
     
     #os.system('clear')
@@ -69,7 +62,8 @@ def direct_mapping():
     while(ch=="true"):
         hit_flag=False  #True if cache hit. False if cache miss
         command=input().split()  
-        os.system('clear')
+        #os.system('clear')
+        print("\n\n\n")
         if(command[0]=="quit" or command[0]=="QUIT"):
             exit()
 
@@ -109,6 +103,7 @@ def direct_mapping():
                 else:
                     hit_flag=False #cache miss
                     print("Cache MISS!! - Address not found\nCache table is updated accordingly")
+                    print("Replacing",data[dec_index]," at index", dec_index)
                     update_table()
 
      
@@ -143,18 +138,20 @@ def direct_mapping():
                 hit_flag=False #cache miss
                 print("Cache MISS!! - Address not found\nCache table is updated accordingly")
                 valid[dec_index]=1  #Make the valid bit as  1
-                write_update_table()
+                update_table()
                
             
             elif(valid[dec_index]==1):
                 if(bin_tag == tag[dec_index]):
                     hit_flag=True   #cache hit
                     print("Cache HIT!")
-                    write_update_table()
+                    print("Content is updated based on Write Policy")
+                    update_table()
                 else:
                     hit_flag=False #cache miss
                     print("Cache MISS!! - Address not found\nCache table is updated accordingly")
-                    write_update_table()
+                    print("Replacing",data[dec_index]," at index", dec_index)
+                    update_table()
 
 
 
@@ -179,9 +176,6 @@ def dec_to_bin(integer,width):
 def bin_to_dec(n): 
     return int(n,2) 
 
-
-
-
 #cache_lines =int( input("Input cache lines in power of 2: "))
 #block_size = int(input("Input block size in power of 2 bytes: "))
 
@@ -189,6 +183,7 @@ def bin_to_dec(n):
 cache_lines=4
 block_size=4
 address_bits=11
+
 """
 block_size=64
 cache_lines=128
