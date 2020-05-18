@@ -96,7 +96,7 @@ def direct_mapping():
 
             if(valid[dec_index]==0):   
                 hit_flag=False #cache miss
-                print("Cache MISS - Address not found\nCache table is updated accordingly")
+                print("Cache MISS!! - Address not found\nCache table is updated accordingly")
                 valid[dec_index]=1  #Make the valid bit as  1
                 update_table()
                
@@ -104,11 +104,11 @@ def direct_mapping():
             elif(valid[dec_index]==1):
                 if(bin_tag == tag[dec_index]):
                     hit_flag=True   #cache hit
-                    print("Cache HIT")
+                    print("Cache HIT!")
                     update_table()
                 else:
                     hit_flag=False #cache miss
-                    print("Cache MISS - Address not found\nCache table is updated accordingly")
+                    print("Cache MISS!! - Address not found\nCache table is updated accordingly")
                     update_table()
 
      
@@ -141,7 +141,7 @@ def direct_mapping():
 
             if(valid[dec_index]==0):   
                 hit_flag=False #cache miss
-                print("Cache MISS - Address not found\nCache table is updated accordingly")
+                print("Cache MISS!! - Address not found\nCache table is updated accordingly")
                 valid[dec_index]=1  #Make the valid bit as  1
                 write_update_table()
                
@@ -149,11 +149,11 @@ def direct_mapping():
             elif(valid[dec_index]==1):
                 if(bin_tag == tag[dec_index]):
                     hit_flag=True   #cache hit
-                    print("Cache HIT")
+                    print("Cache HIT!")
                     write_update_table()
                 else:
                     hit_flag=False #cache miss
-                    print("Cache MISS - Address not found\nCache table is updated accordingly")
+                    print("Cache MISS!! - Address not found\nCache table is updated accordingly")
                     write_update_table()
 
 
