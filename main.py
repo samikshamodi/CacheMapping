@@ -20,14 +20,18 @@ def direct_mapping():
     data=[0]*cache_lines    #table column #decimal
     dirty=[0]*cache_lines   #table column
 
-    print("CACHE TABLE")
+    print("\n-----------------------------------------------------------------------")
+    print("                          CACHE TABLE")
+    print("-----------------------------------------------------------------------")
     print("Index\tValid\tTag\t\tData(Decimal)\t\tDirty Bit")
     for i in range(cache_lines):
         print(" ",i,"\t ",valid[i],"\t",tag[i],"\t\t    ",data[i],"\t\t\t   ",dirty[i])
 
 
     def direct_table():
-        print("CACHE TABLE")
+        print("\n-----------------------------------------------------------------------")
+        print("                          CACHE TABLE")
+        print("-----------------------------------------------------------------------")
         print("Index\tValid\t\tTag\t\tData(Decimal)\tDirty Bit")
         for i in range(cache_lines):
             print(i,"\t",valid[i],"\t",tag[i],"\t",data[i],"\t",dirty[i])
@@ -76,6 +80,7 @@ def direct_mapping():
                 continue
             print("read",dec_address)
             print("Address bits:",address_bits)
+            print()
             print("Instruction Breakdown")
             print("Tag(",tag_bits,"bits )\t\tIndex(",index_bits,"bits )\t\tOffset(",offset_bits,"bits )")
 
@@ -87,6 +92,7 @@ def direct_mapping():
             print(bin_tag,"\t",bin_index,"\t\t", bin_offset)
             dec_index=bin_to_dec(bin_index) #in decimal
             print("Index in decimal: ",dec_index )
+            print()
 
             if(valid[dec_index]==0):   
                 hit_flag=False #cache miss
@@ -117,10 +123,9 @@ def direct_mapping():
                 print("Invalid address")
                 continue
 
-            
-
             print("write ",dec_address,dec_data)
             print("Address bits:",address_bits)
+            print()
             print("Instruction Breakdown")
             print("Tag(",tag_bits,"bits )\t\tIndex(",index_bits,"bits )\t\tOffset(",offset_bits,"bits )")
 
@@ -132,6 +137,7 @@ def direct_mapping():
             print(bin_tag,"\t",bin_index,"\t\t", bin_offset)
             dec_index=bin_to_dec(bin_index) #in decimal
             print("Index in decimal: ",dec_index )
+            print()
 
             if(valid[dec_index]==0):   
                 hit_flag=False #cache miss
@@ -183,10 +189,10 @@ def bin_to_dec(n):
 cache_lines=4
 block_size=4
 address_bits=11
-
+"""
 block_size=64
 cache_lines=128
-address_bits=32
+address_bits=32"""
 
 
 print("cache lines: ",cache_lines)
