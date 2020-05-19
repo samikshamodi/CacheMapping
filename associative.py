@@ -8,6 +8,7 @@ import os
 
 # It is for a 32 bit system by default
 
+
 def associative_mapping():
     tag_bits = address_bits-offset_bits
     print("tag bits:", tag_bits)
@@ -105,7 +106,7 @@ def associative_mapping():
                     dec_index = cl_cnt
                     cl_cnt += 1
                     print(
-                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2") #TODO goto level 2
+                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                     level2(dec_address)
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
@@ -116,10 +117,10 @@ def associative_mapping():
                     hit_flag = False
                     dec_index = lru.pop(0)
                     print(
-                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2") #TODO goto level 2
+                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                     level2(dec_address)
                     print("\nAddress", dec_address,
-                          "will replace the block at index", dec_index,"in Level 1")
+                          "will replace the block at index", dec_index, "in Level 1")
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
 
@@ -162,7 +163,7 @@ def associative_mapping():
                     dec_index = cl_cnt
                     cl_cnt += 1
                     print(
-                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")   #TODO goto level 2
+                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                     level2(dec_address)
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
@@ -173,12 +174,13 @@ def associative_mapping():
                     hit_flag = False
                     dec_index = lru.pop(0)
                     print(
-                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")    #TODO goto level 2
+                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                     level2(dec_address)
                     print("Address", dec_address,
-                          "will replace the block at index", dec_index)
+                          "will replace the block at index", dec_index, "in Level 1")
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
+
 
 def level2(dec_address):
     global valid2
@@ -262,7 +264,6 @@ def level2(dec_address):
             update_table()
 
 
-
 def dec_to_bin(integer, width):
     return "{0:0>{1}b}".format(integer, width)
 
@@ -285,17 +286,17 @@ cache_lines = 8
 block_size = 4
 address_bits = 11"""
 
-cache_lines2=cache_lines*2      #Level 2
+cache_lines2 = cache_lines*2  # Level 2
 
 print("cache lines level 1: ", cache_lines)
-print('cache lines level 2: ',cache_lines2)
+print('cache lines level 2: ', cache_lines2)
 print("address bits: ", address_bits)
 
-valid2=[0]*cache_lines2 #table column
-tag2=['-']*cache_lines2 #table column
-data2=[0]*cache_lines2  #table column
-dirty2=[0]*cache_lines2 #table column
-lru2=[]
+valid2 = [0]*cache_lines2  # table column
+tag2 = ['-']*cache_lines2  # table column
+data2 = [0]*cache_lines2  # table column
+dirty2 = [0]*cache_lines2  # table column
+lru2 = []
 cl_cnt2 = 0
 
 
