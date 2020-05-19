@@ -248,7 +248,6 @@ def dec_to_bin(integer, width):
 def bin_to_dec(n):
     return int(n, 2)
 
-"""
 cache_lines = int(input("Input cache lines in level in power of 2: "))
 block_size = int(input("Input block size in power of 2 bytes: "))
 
@@ -257,11 +256,10 @@ try:
         input("Input no of bits in memory address in power of 2: "))
 except:
     address_bits = 32
-"""
 
-cache_lines = 8
+"""cache_lines = 8
 block_size = 4
-address_bits = 11
+address_bits = 11"""
 
 cache_lines2=cache_lines*2      #Level 2
 
