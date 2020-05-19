@@ -249,7 +249,7 @@ def bin_to_dec(n):
     return int(n, 2)
 
 
-cache_lines = int(input("Input cache lines in level in power of 2: "))
+cache_lines = int(input("Input cache lines in level 1 in power of 2: "))
 block_size = int(input("Input block size in power of 2 bytes: "))
 
 try:
