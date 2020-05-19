@@ -95,11 +95,12 @@ def direct_mapping():
             if(valid[dec_index] == 0):
                 hit_flag = False  # cache miss
                 print(
-                    "Cache MISS at Level 1!! - Address not found\nSearching in Level 2") #TODO goto level 2
+                    "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                 level2(dec_address)
                 valid[dec_index] = 1  # Make the valid bit as  1
                 update_table()
 
+            # gotta throw stuff out in case of a miss
             elif(valid[dec_index] == 1):
                 if(bin_tag == tag[dec_index]):
                     hit_flag = True  # cache hit
@@ -108,10 +109,10 @@ def direct_mapping():
                 else:
                     hit_flag = False  # cache miss
                     print(
-                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")    #TODO goto level 2
+                        "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                     level2(dec_address)
                     print("\nAddress", dec_address,
-                          "will replace the block at index", dec_index,"in Level 1")
+                          "will replace the block at index", dec_index, "in Level 1")
                     update_table()
 
         if(command[0] == "write" or command[0] == "WRITE"):
@@ -146,7 +147,7 @@ def direct_mapping():
             if(valid[dec_index] == 0):
                 hit_flag = False  # cache miss
                 print(
-                    "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")    #TODO goto level 2
+                    "Cache MISS at Level 1!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                 level2(dec_address)
                 valid[dec_index] = 1  # Make the valid bit as  1
                 update_table()
@@ -160,10 +161,10 @@ def direct_mapping():
                 else:
                     hit_flag = False  # cache miss
                     print(
-                        "Cache MISS!! - Address not found\nSearching in Level 2")   #TODO goto level 2
+                        "Cache MISS!! - Address not found\nSearching in Level 2")  # TODO goto level 2
                     level2(dec_address)
                     print("\nAddress", dec_address,
-                          "will replace the block at index", dec_index,"in Level 1")
+                          "will replace the block at index", dec_index, "in Level 1")
                     update_table()
 
 
@@ -240,13 +241,13 @@ def level2(dec_address):
             update_table()
 
 
-
 def dec_to_bin(integer, width):
     return "{0:0>{1}b}".format(integer, width)
 
 
 def bin_to_dec(n):
     return int(n, 2)
+
 
 cache_lines = int(input("Input cache lines in level in power of 2: "))
 block_size = int(input("Input block size in power of 2 bytes: "))
@@ -261,20 +262,19 @@ except:
 block_size = 4
 address_bits = 11"""
 
-cache_lines2=cache_lines*2      #Level 2
+cache_lines2 = cache_lines*2  # Level 2
 
 print("cache lines level 1: ", cache_lines)
-print('cache lines level 2: ',cache_lines2)
+print('cache lines level 2: ', cache_lines2)
 print("address bits: ", address_bits)
 
-valid2=[0]*cache_lines2 #table column
-tag2=['-']*cache_lines2 #table column
-data2=[0]*cache_lines2  #table column
-dirty2=[0]*cache_lines2 #table column
+valid2 = [0]*cache_lines2  # table column
+tag2 = ['-']*cache_lines2  # table column
+data2 = [0]*cache_lines2  # table column
+dirty2 = [0]*cache_lines2  # table column
 
 
 # Finding no of bits in offset
 offset_bits = int(math.log(block_size, 2))
 print("offset bits: ", offset_bits)
 direct_mapping()
-
