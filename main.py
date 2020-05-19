@@ -266,13 +266,15 @@ def associative_mapping():
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
 
-            # all cache lines are filled. Now in case of a miss we need to through stuff out
+            # all cache lines are filled. Now in case of a miss we need to throw stuff out
             if(cl_cnt >= cache_lines):
                 if bin_tag not in tag:  # Cache miss
                     hit_flag = False
                     dec_index = lru.pop(0)
                     print(
                         "Cache MISS!! - Address not found\nCache table is updated accordingly")
+                    print("Address", dec_address,
+                          "will replace the block at index", dec_index)
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
 
@@ -475,6 +477,8 @@ def k_associative_mapping():
                     way_index = lru[dec_index].pop(0)
                     print(
                         "Cache MISS!! - Address not found\nCache table is updated accordingly")
+                    print("Address", dec_address,
+                          "will replace the block at index", dec_index)
                     valid[dec_index][way_index] = 1  # Make valid bit as 1
                     update_table()
 
