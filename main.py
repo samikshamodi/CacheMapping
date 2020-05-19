@@ -1,11 +1,12 @@
+# End Sem Assignment
+# Samiksha Modi
+# Roll No 2019331
+
 import math
 import random
 import os
 
-# It is for a 32 bit system
-# TODO handle invalid address input part
-# TODO mention arraylist size limitation when taking address. 32 bits address ka data pura nhi store kar payga
-# TODO Assume that the size of each memory word is 1 byte.
+# It is for a 32 bit system by default
 
 
 def direct_mapping():
@@ -265,13 +266,15 @@ def associative_mapping():
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
 
-            # all cache lines are filled. Now in case of a miss we need to through stuff out
+            # all cache lines are filled. Now in case of a miss we need to throw stuff out
             if(cl_cnt >= cache_lines):
                 if bin_tag not in tag:  # Cache miss
                     hit_flag = False
                     dec_index = lru.pop(0)
                     print(
                         "Cache MISS!! - Address not found\nCache table is updated accordingly")
+                    print("Address", dec_address,
+                          "will replace the block at index", dec_index)
                     valid[dec_index] = 1  # Make the valid bit as  1
                     update_table()
 
@@ -367,7 +370,7 @@ def k_associative_mapping():
     for i in range(total_sets):
         for j in range(set_size):
             print(" ", i, "\t ", valid[i][j], "\t", tag[i][j], "\t\t    ", data[i][j],
-                  "\t\t\t   ", dirty[i][j], "    ", i, j)  # TODO remove i j from last
+                  "\t\t\t   ", dirty[i][j])
 
     def k_associative_table():
         print("\n-----------------------------------------------------------------------")
@@ -377,7 +380,7 @@ def k_associative_mapping():
         for i in range(total_sets):
             for j in range(set_size):
                 print(" ", i, "\t ", valid[i][j], "\t", tag[i][j], "\t\t    ", data[i][j],
-                      "\t\t\t   ", dirty[i][j], "    ", i, j)  # TODO remove i j from last
+                      "\t\t\t   ", dirty[i][j])
         print("lru:", lru)
 
     def update_table():
@@ -474,6 +477,8 @@ def k_associative_mapping():
                     way_index = lru[dec_index].pop(0)
                     print(
                         "Cache MISS!! - Address not found\nCache table is updated accordingly")
+                    print("Address", dec_address,
+                          "will replace the block at index", dec_index)
                     valid[dec_index][way_index] = 1  # Make valid bit as 1
                     update_table()
 
