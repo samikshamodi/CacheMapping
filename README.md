@@ -39,3 +39,36 @@ python3 level2.py
 After every valid command, the entire cache will be printed. In case of a MISS, it will print
 address not found and will update the cache table with the new dataset. In case of a replacement,
 it will also print the address by which the block will be replaced.
+
+## Logic
+Cache HIT - When requested data is found in the cache
+Cache MISS - When requested data is not found in the cache
+Caches are of 3 types
+- Direct Mapped Cache
+- Fully Associative Cache
+- Set Associative Cache
+
+Write Policy - Write Through (Hence Dirty Bit is always 0)
+
+Replacement Policy - LRU (Least Recently Used)
+
+### Direct Mapped Cache
+Definitions
+
+Tag - distinguishes one cache memory block from another
+
+Index - identifies the cache block
+
+Offset - points to desired data in the cache block
+
+Instruction Breakdown
+
+Each of the address of read or write instruction is broken into three parts: Tag, Index and Offset
+
+Tag bits = Address bits - Index bits - Offset bits
+
+Index bits = log​ 2​ (No of Cache Lines)
+
+Offset bits = log​ 2​ (Block Size in bytes)
+
+
