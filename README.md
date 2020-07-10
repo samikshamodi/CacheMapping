@@ -105,3 +105,13 @@ Total sets = No of Cache Lines/Set Size <br>
 Tag bits = Address bits - Index bits - Offset bits <br>
 Index bits = log​ 2​ (Total sets) <br>
 Offset bits = log​ 2​ (Block Size in bytes)
+
+The requested address is converted to binary and is broken down into tag, index and
+offset. Then the cache table with the corresponding index is examined. N-ways of cache blocks
+is searched and if the tag matches with one of the entries, cache hit is obtained. Else, cache miss
+obtained. When cache miss occurs the cache table will be updated with the new dataset. If the
+cache is full then it will place the new dataset at the least recently used block in the
+corresponding index. The lru array is a 2d array. It’s 0​ th​ array corresponds to set 0 (Index 0 in the
+above picture) , it’s 1​ st​ array corresponds to set 1 (Index 1 in the above picture) and so on for all
+the sets in the cache. Each 1d array in the lru 2d array works the same way as it does in fully
+associative mapping.
