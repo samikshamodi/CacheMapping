@@ -53,7 +53,7 @@ Write Policy - Write Through (Hence Dirty Bit is always 0)
 Replacement Policy - LRU (Least Recently Used)
 
 ### Direct Mapped Cache
-Definitions
+Definitions <br>
 Tag - distinguishes one cache memory block from another
 Index - identifies the cache block
 Offset - points to desired data in the cache block
