@@ -31,3 +31,11 @@ python3 level2.py
   - 0 - Direct
   - 1 - Associative
   - 2 - N-way Set Associative
+  
+## Commands
+- read address
+- write address data
+- quit - to exit the program
+After every valid command, the entire cache will be printed. In case of a MISS, it will print
+address not found and will update the cache table with the new dataset. In case of a replacement,
+it will also print the address by which the block will be replaced.
