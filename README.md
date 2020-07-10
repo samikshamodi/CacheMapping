@@ -54,15 +54,15 @@ Replacement Policy - LRU (Least Recently Used)
 
 ### Direct Mapped Cache
 Definitions <br>
-Tag - distinguishes one cache memory block from another
-Index - identifies the cache block
-Offset - points to desired data in the cache block
+Tag - distinguishes one cache memory block from another <br>
+Index - identifies the cache block <br>
+Offset - points to desired data in the cache block <br>
 
-Instruction Breakdown
+Instruction Breakdown <br>
 Each of the address of read or write instruction is broken into three parts: Tag, Index and Offset
 
-Tag bits = Address bits - Index bits - Offset bits
-Index bits = log​ 2​ (No of Cache Lines)
+Tag bits = Address bits - Index bits - Offset bits <br>
+Index bits = log​ 2​ (No of Cache Lines) <br>
 Offset bits = log​ 2​ (Block Size in bytes)
 
 
