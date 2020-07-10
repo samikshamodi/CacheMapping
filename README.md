@@ -26,7 +26,7 @@ python3 level2.py
 - Cache Lines - in the power of 2
 - Block Size - in the power of 2 bytes
 - Address Bits - 32 bits by default but can be 16,32,64 bits based on user discretion
--Set Size - is n in the power of 2 for n-way set associative mapping
+- Set Size - is n in the power of 2 for n-way set associative mapping
 - Mapping
   - 0 - Direct
   - 1 - Associative
