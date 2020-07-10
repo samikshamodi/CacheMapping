@@ -1,5 +1,5 @@
 #  Cache Mapping
-It is a program that simulates the 3 different types of cache mapping techniques namely - direct, fullt associative and n-way set associative. I wrote this program in my second semester at IIITD for my course Computer Organization.
+It is a program that simulates the 3 different types of cache mapping techniques namely - direct, fully associative and n-way set associative. I wrote this program in my second semester at IIITD for my course Computer Organization.
 
 ## Usage
 - The program is written in Python 3.6.9
