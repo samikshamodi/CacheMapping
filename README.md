@@ -41,3 +41,5 @@ address not found and will update the cache table with the new dataset. In case 
 it will also print the address by which the block will be replaced.
 
 Refer Cache Assignment.pdf in the repository to see the screenshots of the program being run.
+[Cache Assignment.pdf](https://github.com/samikshamodi/cache-mapping/files/4902674/Cache.Assignment.pdf)
+
